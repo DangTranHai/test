@@ -3,7 +3,7 @@ import { lazy, type LazyExoticComponent, type ComponentType } from "react";
 
 type TRoute = {
   path: string;
-  element: LazyExoticComponent<() => JSX.Element>;
+  element: LazyExoticComponent<ComponentType<any>>;
   nested?: TRoute[];
 };
 
@@ -40,16 +40,26 @@ const routes: TRoute[] = [
 
 export const renderRoute = () => {
   return routes.map((route) => {
+    const Element = route.element;
+
     if (route.nested) {
       return (
-        <Route key={route.path} path={route.path} element={<route.element />}>
-          {route.nested.map((item) => (
-            <Route key={item.path} path={item.path} element={<item.element />} />
-          ))}
+        <Route key={route.path} path={route.path} element={<Element />}>
+          {route.nested.map((item) => {
+            const ChildElement = item.element;
+
+            return (
+              <Route
+                key={item.path}
+                path={item.path}
+                element={<ChildElement />}
+              />
+            );
+          })}
         </Route>
       );
     }
 
-    return <Route key={route.path} path={route.path} element={<route.element />} />;
+    return <Route key={route.path} path={route.path} element={<Element />} />;
   });
 };

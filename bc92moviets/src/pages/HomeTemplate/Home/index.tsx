@@ -20,10 +20,10 @@ export default function Home() {
 
         if (loading) return <div>Loading...</div>;
 
-
+        }
   return (
     <div className="container mx-auto py-8">
        {renderListMovie()}
     </div>
   )
-}}
+}
